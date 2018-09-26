@@ -1,0 +1,136 @@
+C51 COMPILER V9.54   DHT11                                                                 09/26/2018 21:28:50 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DHT11
+OBJECT MODULE PLACED IN .\Objects\DHT11.obj
+COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE HARDWARE\DHT11\DHT11.C OPTIMIZE(8,SPEED) INCDIR(.\HARDWARE\LCD12864B;.\H
+                    -ARDWARE\DS18B20;.\HARDWARE\DHT11) PRINT(.\Listings\DHT11.lst) TABS(2) OBJECT(.\Objects\DHT11.obj)
+
+line level    source
+
+   1           
+   2          #include "DHT11.h"
+   3          #include <intrins.h>
+   4           
+   5          static void delay20msForDHT11(void) ;
+   6          static void delay10usForDHT11(void) ;
+   7          static UB8  DHT11ReadByte(void) ; 
+   8          
+   9          static void delay20msForDHT11(void) //@11.0592MHZ
+  10          {
+  11   1        unsigned char i, j, k;
+  12   1       
+  13   1        i = 1;
+  14   1        j = 216;
+  15   1        k = 35;
+  16   1        do
+  17   1        {
+  18   2          do
+  19   2          {
+  20   3            while (--k);
+  21   3          } while (--j);
+  22   2        } while (--i);
+  23   1      }
+  24          
+  25          static void delay10usForDHT11(void)
+  26          {
+  27   1        unsigned char i;
+  28   1       
+  29   1        _nop_();
+  30   1        i = 25;
+  31   1        while (--i);
+  32   1      }
+  33           
+  34          SB8  DHT11Init(void)
+  35          {
+  36   1        SB8 existenceFlag ; 
+  37   1        UB8 i=0 ;
+  38   1        
+  39   1        DHT11_DATA_BIT = HIGH_LEVEL ;
+  40   1        _nop_() ;
+  41   1        _nop_() ;
+  42   1        
+  43   1        DHT11_DATA_BIT = LOW_LEVEL ;
+  44   1        delay20msForDHT11() ;
+  45   1        
+  46   1        DHT11_DATA_BIT = HIGH_LEVEL ;
+  47   1        delay10usForDHT11() ;
+  48   1        delay10usForDHT11() ;
+  49   1        delay10usForDHT11() ;
+  50   1        delay10usForDHT11() ;
+  51   1        delay10usForDHT11() ;
+  52   1       
+  53   1        if( !DHT11_DATA_BIT)
+  54   1          existenceFlag = DHT11_EXISTENCT ;
+C51 COMPILER V9.54   DHT11                                                                 09/26/2018 21:28:50 PAGE 2   
+
+  55   1        else
+  56   1          existenceFlag = DHT11_NOT_EXISTENCT ;
+  57   1        
+  58   1        while((!DHT11_DATA_BIT) && (i<250)) 
+  59   1          i++ ; 
+  60   1      
+  61   1        return existenceFlag ;
+  62   1      }
+  63           
+  64          static UB8  DHT11ReadByte(void)
+  65          {
+  66   1        UB8 j=0 ;
+  67   1        UB8 i, datCode;
+  68   1       
+  69   1        for(i=0;i<8;i++)    
+  70   1        { 
+  71   2            datCode <<= 1;
+  72   2            j=0 ;
+  73   2            while( (! DHT11_DATA_BIT) && (j<250))     
+  74   2              j++ ;       
+  75   2          delay10usForDHT11() ;
+  76   2          delay10usForDHT11() ;
+  77   2          delay10usForDHT11() ;
+  78   2          delay10usForDHT11() ;
+  79   2          if (DHT11_DATA_BIT) 
+  80   2          { 
+  81   3            datCode |= 0x01;
+  82   3            j=0 ;
+  83   3            while((DHT11_DATA_BIT) &&(j<250))
+  84   3              j++ ;
+  85   3          } 
+  86   2        }
+  87   1        return datCode; 
+  88   1      }
+  89           
+  90          void DHT11ReadInfo(DHT11_info *temp)
+  91          {
+  92   1        temp->Humidity_H  = DHT11ReadByte() ; //Humidity_H
+  93   1        temp->Humidity_L  = DHT11ReadByte() ; //Humidity_L
+  94   1        temp->Temperature_H = DHT11ReadByte() ; //Temperature_H
+  95   1        temp->Temperature_L = DHT11ReadByte() ; //Temperature_L
+  96   1        temp->DHT11_CRC   = DHT11ReadByte() ; //DHT11_CRC
+  97   1       
+  98   1        delay20msForDHT11() ;
+  99   1        delay20msForDHT11() ;
+ 100   1        delay20msForDHT11() ;
+ 101   1        delay20msForDHT11() ;
+ 102   1        delay20msForDHT11() ;
+ 103   1        delay20msForDHT11() ;
+ 104   1        delay20msForDHT11() ;
+ 105   1        delay20msForDHT11() ;
+ 106   1        delay20msForDHT11() ;
+ 107   1        delay20msForDHT11() ;
+ 108   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    180    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+C51 COMPILER V9.54   DHT11                                                                 09/26/2018 21:28:50 PAGE 3   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

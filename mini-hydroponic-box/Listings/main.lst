@@ -1,0 +1,215 @@
+C51 COMPILER V9.54   MAIN                                                                  09/26/2018 21:28:51 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE USER\main.c OPTIMIZE(8,SPEED) INCDIR(.\HARDWARE\LCD12864B;.\HARDWARE\DS1
+                    -8B20;.\HARDWARE\DHT11) PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<REG52.h>
+   2          #include"lcd12864.h"
+   3          #include"temp.h"
+   4          #include"DHT11.h"
+   5          #include "common.h"
+   6          
+   7          #define   on  1
+   8          #define   off 0
+   9          
+  10          unsigned char tempbuf,count,flag;
+  11          DHT11_info dataCode;
+  12          unsigned char code char_WenDu[]="温度：        ℃";
+  13          unsigned char code char_ShiDu[]="湿度:         RH";
+  14          unsigned char code char_CO2[]="CO2 浓度：   ppm";
+  15          
+  16          sbit heat  = P3^6;
+  17          sbit light = P3^5;
+  18          sbit motor = P3^4;
+  19          void BlueteethInit();
+  20          void init();
+  21          void display_temp(int temp);
+  22          void display_DHT11();
+  23          void LcdDisplay_DHT();
+  24          
+  25          void main()
+  26          {
+  27   1          tempbuf= 0;
+  28   1          count = 0;
+  29   1          flag = 0;
+  30   1          init();
+  31   1          while(1)
+  32   1          {
+  33   2            if(tempbuf == 0)  //关闭所有继电器
+  34   2            {heat=off;  light=off;  motor=off;}
+  35   2            if(tempbuf == 'L')  //打开灯光
+  36   2                light = on;
+  37   2            if(tempbuf == 'H')  //加热
+  38   2                heat = on;
+  39   2            if(tempbuf == 'M')  //打开水泵
+  40   2                motor = on;
+  41   2            
+  42   2            if(tempbuf == 'l')  //关闭灯光
+  43   2                light = off;
+  44   2            if(tempbuf == 'h')  //关闭加热
+  45   2                heat = off;
+  46   2            if(tempbuf == 'm')  //关闭水泵
+  47   2                motor = off;  
+  48   2            
+  49   2            if(flag)        //2s钟刷新一次温度湿度
+  50   2            {
+  51   3              EA = 0;       //关闭所有中断
+  52   3              TR1 = 0;      //关闭计数器
+  53   3              TR0 = 0;
+  54   3          
+C51 COMPILER V9.54   MAIN                                                                  09/26/2018 21:28:51 PAGE 2   
+
+  55   3              display_temp(Ds18b20ReadTemp());  
+  56   3              display_DHT11();
+  57   3              
+  58   3              flag = 0;
+  59   3              BlueteethInit();
+  60   3            }
+  61   2          } 
+  62   1      }
+  63          
+  64          void BlueteethInit()
+  65          {
+  66   1        SCON = 0x50;  
+  67   1        TMOD = 0x21;  
+  68   1      
+  69   1        TH0 = 76;     //装这个初值，只需50ms就会溢出
+  70   1        TL0 = 208;
+  71   1        TH1 = 0xfd;   //波特率9600
+  72   1        TL1 = 0xfd;
+  73   1      
+  74   1        TR1 = 1;
+  75   1        TR0 = 1;
+  76   1        ET0=1;
+  77   1        ET1=1;
+  78   1        ES = 1;
+  79   1        EA = 1;
+  80   1      }
+  81          
+  82          void init()
+  83          {   
+  84   1          unsigned char i = 0;
+  85   1          BlueteethInit();
+  86   1          P1 = 0; P3 = 0;
+  87   1          LCD12864_Init();
+  88   1          LCD12864_SetWindow(0, 0);
+  89   1          while(char_WenDu[i]!='\0')
+  90   1          {
+  91   2              LCD12864_WriteData(char_WenDu[i]);
+  92   2              i++;
+  93   2          }
+  94   1          i = 0;
+  95   1          LCD12864_SetWindow(1, 0);
+  96   1          while(char_ShiDu[i]!='\0')
+  97   1          {
+  98   2              LCD12864_WriteData(char_ShiDu[i]);
+  99   2              i++;
+ 100   2          }
+ 101   1          i = 0;
+ 102   1          LCD12864_SetWindow(2, 0);
+ 103   1          while(char_CO2[i]!='\0')
+ 104   1          {
+ 105   2              LCD12864_WriteData(char_CO2[i]);
+ 106   2              i++;
+ 107   2          }
+ 108   1      }
+ 109          
+ 110          /************** DS18B20 *****************/
+ 111          void display_temp(int temp)    //lcd显示温度
+ 112          { 
+ 113   1          unsigned char i, datas[] = {0, 0, 0, 0, 0}; 
+ 114   1          float tp; 
+ 115   1              
+ 116   1          if(temp< 0)           //当温度为负数时
+C51 COMPILER V9.54   MAIN                                                                  09/26/2018 21:28:51 PAGE 3   
+
+ 117   1          {
+ 118   2            LCD12864_SetWindow(0, 3);   
+ 119   2            LCD12864_WriteData('-');         //显示负号
+ 120   2          
+ 121   2            temp=temp-1;            //负数的补码转换
+ 122   2            temp=~temp;
+ 123   2            tp=temp;
+ 124   2            temp=tp*0.0625*100+0.5;     //一个等级为0.0625℃，故乘以0.0625
+ 125   2                                        //乘以100用来保留小数点后2位，+0.5实现四舍五入
+ 126   2          }
+ 127   1          else
+ 128   1          {     
+ 129   2            LCD12864_SetWindow(0, 3);   
+ 130   2            LCD12864_WriteData('+');      
+ 131   2            tp=temp;
+ 132   2            temp=tp*0.0625*100+0.5; 
+ 133   2          }
+ 134   1          datas[0] = temp / 10000;
+ 135   1          datas[1] = temp % 10000 / 1000;
+ 136   1          datas[2] = temp % 1000 / 100;
+ 137   1          datas[3] = temp % 100 / 10;
+ 138   1          datas[4] = temp % 10;
+ 139   1          for(i=0;i<5;i++)
+ 140   1          { 
+ 141   2              if(i == 3)
+ 142   2                  LCD12864_WriteData('.');      
+ 143   2              LCD12864_WriteData('0'+datas[i]);
+ 144   2          }
+ 145   1      }
+ 146          
+ 147          /****************  温度湿度部分  *********************/
+ 148          void display_DHT11()
+ 149          { 
+ 150   1        unsigned char i = 0;
+ 151   1        if(DHT11Init()==DHT11_EXISTENCT) 
+ 152   1        {
+ 153   2            i=0;
+ 154   2            while((DHT11_DATA_BIT )&& (i < 250))
+ 155   2              i++; 
+ 156   2        
+ 157   2            DHT11ReadInfo(&dataCode) ;
+ 158   2        
+ 159   2            LCD12864_SetWindow(1, 3);       //
+ 160   2            LCD12864_WriteData('X'+(dataCode.Humidity_H / 10));
+ 161   2            LCD12864_WriteData('X'+(dataCode.Humidity_H % 10));
+ 162   2            LCD12864_WriteData('.');
+ 163   2            LCD12864_WriteData('X'+(dataCode.Humidity_L / 10));
+ 164   2            LCD12864_WriteData('X'+(dataCode.Humidity_L % 10));   
+ 165   2        }
+ 166   1      }
+ 167          
+ 168          void Serial(void) interrupt 4
+ 169          {
+ 170   1        tempbuf = SBUF;
+ 171   1        RI = 0;         
+ 172   1      }
+ 173          void T0_time() interrupt 1
+ 174          {
+ 175   1        TH0 = 76;
+ 176   1        TL0 = 208;
+ 177   1        count++;
+ 178   1        if(count==40)   //2s钟标志位置1
+C51 COMPILER V9.54   MAIN                                                                  09/26/2018 21:28:51 PAGE 4   
+
+ 179   1        {
+ 180   2          count = 0;
+ 181   2          flag = 1;
+ 182   2        }
+ 183   1      }
+ 184          
+ 185          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    600    ----
+   CONSTANT SIZE    =     56    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8      14
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

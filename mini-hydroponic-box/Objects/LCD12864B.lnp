@@ -1,0 +1,6 @@
+".\Objects\lcd12864.obj",
+".\Objects\temp.obj",
+".\Objects\DHT11.obj",
+".\Objects\main.obj" 
+TO ".\Objects\LCD12864B" 
+PRINT(".\Listings\LCD12864B.m51") RAMSIZE(256) 

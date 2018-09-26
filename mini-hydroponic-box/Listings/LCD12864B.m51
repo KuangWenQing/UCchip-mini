@@ -1,0 +1,226 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        09/26/2018  21:28:51  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+E:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\lcd12864.obj, .\Objects\temp.obj, .\Objects\DHT11.obj, .\Objects\main.obj TO .\Obj
+>> ects\LCD12864B PRINT (.\Listings\LCD12864B.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\lcd12864.obj (LCD12864)
+  .\Objects\temp.obj (TEMP)
+  .\Objects\DHT11.obj (DHT11)
+  .\Objects\main.obj (MAIN)
+  E:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPADD)
+  E:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  E:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FCAST)
+  E:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CASTF)
+  E:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C?COPY)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTPTR)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTOPTR)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C?SIDIV)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C?LNEG)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\LCD12864B (LCD12864)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000CH     UNIT         _DATA_GROUP_
+            DATA    0014H     0008H     UNIT         ?DT?MAIN
+            IDATA   001CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     0015H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     07DAH                  *** GAP ***
+            CODE    0800H     0480H     UNIT         ?C?LIB_CODE
+            CODE    0C80H     0105H     UNIT         ?PR?_DISPLAY_TEMP?MAIN
+            CODE    0D85H     0063H     UNIT         ?PR?DISPLAY_DHT11?MAIN
+            CODE    0DE8H     0059H     UNIT         ?PR?MAIN?MAIN
+            CODE    0E41H     0056H     UNIT         ?PR?INIT?MAIN
+            CODE    0E97H     0042H     UNIT         ?PR?_DS18B20WRITEBYTE?TEMP
+            CODE    0ED9H     003EH     UNIT         ?PR?DS18B20READBYTE?TEMP
+            CODE    0F17H     0038H     UNIT         ?CO?MAIN
+            CODE    0F4FH     0036H     UNIT         ?PR?DHT11READBYTE?DHT11
+            CODE    0F85H     002FH     UNIT         ?PR?_DHT11READINFO?DHT11
+            CODE    0FB4H     002AH     UNIT         ?PR?DHT11INIT?DHT11
+            CODE    0FDEH     0027H     UNIT         ?PR?DS18B20INIT?TEMP
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/26/2018  21:28:51  PAGE 2
+
+
+            CODE    1005H     0025H     UNIT         ?PR?_LCD12864_DELAY1MS?LCD12864
+            CODE    102AH     0024H     UNIT         ?PR?LCD12864_BUSY?LCD12864
+            CODE    104EH     0020H     UNIT         ?PR?_LCD12864_WRITECMD?LCD12864
+            CODE    106EH     0020H     UNIT         ?PR?_LCD12864_WRITEDATA?LCD12864
+            CODE    108EH     0020H     UNIT         ?PR?_LCD12864_SETWINDOW?LCD12864
+            CODE    10AEH     001FH     UNIT         ?PR?BLUETEETHINIT?MAIN
+            CODE    10CDH     001EH     UNIT         ?PR?_DELAY1MS?TEMP
+            CODE    10EBH     001CH     UNIT         ?PR?T0_TIME?MAIN
+            CODE    1107H     0017H     UNIT         ?PR?DS18B20READTEMP?TEMP
+            CODE    111EH     0016H     UNIT         ?PR?DELAY20MSFORDHT11?DHT11
+            CODE    1134H     0013H     UNIT         ?PR?LCD12864_INIT?LCD12864
+            CODE    1147H     000FH     UNIT         ?PR?DS18B20CHANGTEMP?TEMP
+            CODE    1156H     000FH     UNIT         ?PR?DELAY10USFORDHT11?DHT11
+            CODE    1165H     000CH     UNIT         ?C_C51STARTUP
+            CODE    1171H     0008H     UNIT         ?PR?DS18B20READTEMPCOM?TEMP
+            CODE    1179H     0006H     UNIT         ?PR?SERIAL?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\LCD12864B (LCD12864)
+
+
+SEGMENT                                    DATA_GROUP 
+  +--> CALLED SEGMENT                    START    LENGTH
+--------------------------------------------------------
+?C_C51STARTUP                            -----    -----
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN                            -----    -----
+  +--> ?PR?INIT?MAIN
+  +--> ?PR?DS18B20READTEMP?TEMP
+  +--> ?PR?_DISPLAY_TEMP?MAIN
+  +--> ?PR?DISPLAY_DHT11?MAIN
+  +--> ?PR?BLUETEETHINIT?MAIN
+
+?PR?INIT?MAIN                            0008H    0001H
+  +--> ?PR?BLUETEETHINIT?MAIN
+  +--> ?PR?LCD12864_INIT?LCD12864
+  +--> ?PR?_LCD12864_SETWINDOW?LCD12864
+  +--> ?CO?MAIN
+  +--> ?PR?_LCD12864_WRITEDATA?LCD12864
+
+?PR?LCD12864_INIT?LCD12864               -----    -----
+  +--> ?PR?_LCD12864_WRITECMD?LCD12864
+
+?PR?_LCD12864_WRITECMD?LCD12864          -----    -----
+  +--> ?PR?LCD12864_BUSY?LCD12864
+  +--> ?PR?_LCD12864_DELAY1MS?LCD12864
+
+?PR?LCD12864_BUSY?LCD12864               -----    -----
+  +--> ?PR?_LCD12864_DELAY1MS?LCD12864
+
+?PR?_LCD12864_SETWINDOW?LCD12864         -----    -----
+  +--> ?PR?_LCD12864_WRITECMD?LCD12864
+
+?PR?_LCD12864_WRITEDATA?LCD12864         -----    -----
+  +--> ?PR?LCD12864_BUSY?LCD12864
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/26/2018  21:28:51  PAGE 3
+
+
+  +--> ?PR?_LCD12864_DELAY1MS?LCD12864
+
+?PR?DS18B20READTEMP?TEMP                 0008H    0001H
+  +--> ?PR?DS18B20CHANGTEMP?TEMP
+  +--> ?PR?DS18B20READTEMPCOM?TEMP
+  +--> ?PR?DS18B20READBYTE?TEMP
+
+?PR?DS18B20CHANGTEMP?TEMP                -----    -----
+  +--> ?PR?_DS18B20WRITEBYTE?TEMP
+  +--> ?PR?_DELAY1MS?TEMP
+
+?PR?_DS18B20WRITEBYTE?TEMP               0009H    0002H
+  +--> ?PR?DS18B20INIT?TEMP
+  +--> ?PR?_DELAY1MS?TEMP
+
+?PR?DS18B20INIT?TEMP                     -----    -----
+  +--> ?PR?_DELAY1MS?TEMP
+
+?PR?DS18B20READTEMPCOM?TEMP              -----    -----
+  +--> ?PR?_DS18B20WRITEBYTE?TEMP
+
+?PR?_DISPLAY_TEMP?MAIN                   0008H    000CH
+  +--> ?CO?MAIN
+  +--> ?PR?_LCD12864_SETWINDOW?LCD12864
+  +--> ?PR?_LCD12864_WRITEDATA?LCD12864
+
+?PR?DISPLAY_DHT11?MAIN                   0008H    0001H
+  +--> ?PR?DHT11INIT?DHT11
+  +--> ?PR?_DHT11READINFO?DHT11
+  +--> ?PR?_LCD12864_SETWINDOW?LCD12864
+  +--> ?PR?_LCD12864_WRITEDATA?LCD12864
+
+?PR?DHT11INIT?DHT11                      -----    -----
+  +--> ?PR?DELAY20MSFORDHT11?DHT11
+  +--> ?PR?DELAY10USFORDHT11?DHT11
+
+?PR?_DHT11READINFO?DHT11                 -----    -----
+  +--> ?PR?DHT11READBYTE?DHT11
+  +--> ?PR?DELAY20MSFORDHT11?DHT11
+
+?PR?DHT11READBYTE?DHT11                  -----    -----
+  +--> ?PR?DELAY10USFORDHT11?DHT11
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\LCD12864B (LCD12864)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C?FPADD
+  C:0807H         PUBLIC        ?C?FPADD
+  C:0803H         PUBLIC        ?C?FPSUB
+  -------         ENDMOD        ?C?FPADD
+
+  -------         MODULE        ?C?FPMUL
+  C:08F8H         PUBLIC        ?C?FPMUL
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/26/2018  21:28:51  PAGE 4
+
+
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FCAST
+  C:0A08H         PUBLIC        ?C?FCASTC
+  C:0A03H         PUBLIC        ?C?FCASTI
+  C:09FEH         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:0A3CH         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?COPY
+  C:0B8DH         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+  -------         MODULE        ?C?CSTPTR
+  C:0BB3H         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?CSTOPTR
+  C:0BC5H         PUBLIC        ?C?CSTOPTR
+  -------         ENDMOD        ?C?CSTOPTR
+
+  -------         MODULE        ?C?SIDIV
+  C:0BE7H         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:0C1DH         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?UIDIV
+  C:0C2BH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 04F9H BYTE (62%) *
+******************************************************************************
+
+Program Size: data=29.0 xdata=0 code=2440
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
